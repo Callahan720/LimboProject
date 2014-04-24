@@ -2,7 +2,7 @@
 This PHP script front-ends linkyprints.php with a login page.
 Originally created By Ron Coleman.
 Revision history:
-Who	Date		Comment
+Who    Date        Comment
 RC  07-Nov-13   Created.
 -->
 <!DOCTYPE html>
@@ -16,7 +16,7 @@ require( 'includes/admin_login_tools.php' ) ;
 
 if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 
-	$user_name = $_POST['user_name'] ;
+    $user_name = $_POST['user_name'] ;
 
     $aid = validate($user_name) ;
 
@@ -28,7 +28,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 }
 
 #else if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
-#	load('admin.php');
+#    load('admin.php');
 #}
 
 ?>
