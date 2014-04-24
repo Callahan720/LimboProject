@@ -71,7 +71,7 @@ function show_form($status, $item_name, $description, $location_id, $room, $cont
 	echo '<table>';
 	echo '<tr>';
 	echo '<td>I have</td> 
-		  <td colspan = "2"><select name = "status">
+		  <td><select name = "status">
 			  <option value = "lost">Lost</option>;
 			  <option value = "found">Found</option>
 			  </select>
@@ -79,7 +79,7 @@ function show_form($status, $item_name, $description, $location_id, $room, $cont
 		  <td> an item </td>';
 	echo '</tr>';
 	echo '<tr>';
-	echo '<td> Name of Item: </td> <td colspan = "3"><input type="text" name="item_name" value = "' . $item_name . '"></td>';
+	echo '<td> Name of Item: </td> <td><input type="text" name="item_name" value = "' . $item_name . '"></td>';
 	echo '</tr>';
 	echo '<tr>';
 	echo '<td>Location of Item:</td> 
@@ -115,11 +115,11 @@ function show_form($status, $item_name, $description, $location_id, $room, $cont
 			  <option value = "Library ">Library</option>
 			  <option value = "Steel Plant">Steel Plant</option>
 			  </select></td>
-			<td> Room: </td> <input type="text" name="room" value = "' . $room . '"></td>'
+			<td> Room: </td> <td> <input type="text" name="room" value = "' . $room . '"></td>' ;
 	echo '</tr>';
 	echo '<tr>';
 	echo '<td> Description:  </td>
-		  <td> <textarea rows = "10" columns = "30" name = "description" value = "' . $description . '"> </td>
+		  <td> <textarea rows = "5" columns = "50" name = "description" value = "' . $description . '"> </textarea> </td>
 		  </tr>';
 	echo '</table>';
 	echo '<hr>';
