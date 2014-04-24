@@ -12,7 +12,7 @@ require( 'includes/helpers.php' ) ;
 
 //Initialize president info on a GET
 if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
-	$status = "lost";
+	$status = "";
 	$item_name = "" ;
     $description = "";
 	$location_id = "" ;
@@ -84,14 +84,14 @@ function show_form($status, $item_name, $description, $location_id, $room, $cont
 	echo '<tr>';
 	echo '<td>Location of Item:</td> 
 		  <td><select name = "location_id">
-			  <option value = "Champagnat" <?php if ($days ==  "Champagnat") echo ' selected="selected"'; ?> >Champagnat</option>;
-			  <option value = "Leo" <?php if ($days ==  "Leo") echo ' selected="selected"'; ?> >Leo</option>
-			  <option value = "Sheahan" <?php if ($days ==  "Sheahan") echo ' selected="selected"'; ?> >Sheahan</option>
-			  <option value = "Marian" <?php if ($days ==  "Marian") echo ' selected="selected"'; ?> >Marian</option>
-			  <option value = "Gartland" <?php if ($days == "Gartland") echo ' selected="selected"'; ?> >Gartland</option>
-			  <option value = "Midrise" <?php if ($days ==  "Midrise") echo ' selected="selected"'; ?> >Midrise</option>
-			  <option value = "Upper West Cedar" <?php if ($days ==  "Upper West Cedar") echo ' selected="selected"'; ?> >Upper West Cedar</option>
-			  <option value = "Talmadge" <?php if ($days ==  "Talmadge") echo ' selected="selected"'; ?> >Talmadge</option>
+			  <option value = "Champagnat" <?php if ($location_name ==  "Champagnat") echo ' selected="selected"'; ?> >Champagnat</option>;
+			  <option value = "Leo" <?php if ($location_name ==  "Leo") echo ' selected="selected"'; ?> >Leo</option>
+			  <option value = "Sheahan" <?php if ($location_name ==  "Sheahan") echo ' selected="selected"'; ?> >Sheahan</option>
+			  <option value = "Marian" <?php if ($location_name ==  "Marian") echo ' selected="selected"'; ?> >Marian</option>
+			  <option value = "Gartland" <?php if ($location_name == "Gartland") echo ' selected="selected"'; ?> >Gartland</option>
+			  <option value = "Midrise" <?php if ($location_name ==  "Midrise") echo ' selected="selected"'; ?> >Midrise</option>
+			  <option value = "Upper West Cedar" <?php if ($location_name ==  "Upper West Cedar") echo ' selected="selected"'; ?> >Upper West Cedar</option>
+			  <option value = "Talmadge" <?php if ($location_name ==  "Talmadge") echo ' selected="selected"'; ?> >Talmadge</option>
 			  <option value = "Lower Fulton" <?php if ($days ==  "Lower Fulton") echo ' selected="selected"'; ?> >Lower Fulton</option>
 			  <option value = "Upper Fulton" <?php if ($days ==  "Upper Fulton") echo ' selected="selected"'; ?> >Upper Fulton</option>
 			  <option value = "Middle Fulton" <?php if ($days ==  "Middle Fulton") echo ' selected="selected"'; ?> >Middle Fulton</option>
