@@ -24,7 +24,7 @@ function show_record_recent($dbc, $days = 7) {
       echo '</TR>';
 
       # For each row result, generate a table row
-      if ( $row = mysqli_fetch_array( $results , MYSQLI_ASSOC ) )
+      while ( $row = mysqli_fetch_array( $results , MYSQLI_ASSOC ) )
       {
         echo '<TR>' ;
         echo '<TD>' . $row['create_date'] . '</TD>' ;
@@ -71,7 +71,7 @@ function show_record_detailed($dbc, $id) {
       if ( $row = mysqli_fetch_array( $results , MYSQLI_ASSOC ) )
       {
       	echo '<TABLE border="0">';
-		echo '<TR>';
+		    echo '<TR>';
         echo '<TH ALIGN="Center">' . $row['item_name'] . '</TH>' ;
         echo '</TR>';
 
@@ -126,7 +126,7 @@ function show_record_detailed_full($dbc, $id) {
       if ( $row = mysqli_fetch_array( $results , MYSQLI_ASSOC ) )
       {
       	echo '<TABLE border="0">';
-		echo '<TR>';
+		    echo '<TR>';
         echo '<TH>' . $row['item_name'] . '</TH>' ;
         echo '</TR>';
         echo '<TR>' ;
@@ -175,17 +175,17 @@ function show_record_detailed_full($dbc, $id) {
 
 
 # Inserts a record into the prints table
-function insert_record($status, $item_name, $description, $location_id, $room, $contact_id, $email, $phone_number) {
+function insert_record($dbc, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) {
   $query = 'INSERT INTO 
-        stuff(status, item_name, description, location_id, room, contact_id, email, phone_number) 
+        stuff(status, item_name, description, location_id, room, contact_name, email, phone_number) 
         VALUES ("' . $status . '" , 
             "' . $item_name . '" , 
             "' . $description . '" , 
             "' . $location_id . '" , 
             "' . $room . '" ,  
-            "' . $conact_id . '" ,  
-            "' . $email . '" , 
-            ' . $phone_number . ' )' ;
+            "' . $contact_name . '" ,  
+            "' . $email . ' " , 
+            "' . $phone_number . ' " )' ;
   
   show_query($query);
   
@@ -197,9 +197,43 @@ function insert_record($status, $item_name, $description, $location_id, $room, $
 }
 
 
+#needed for Limbo
+function show_locations_select($dbc) {
+    # Create a query to get the name and number sorted by number
+    $query = 'SELECT id, name FROM locations ';
+
+    # Execute the query
+    $results = mysqli_query( $dbc , $query ) ;
+    
+
+    # Show results
+    if( $results )
+    {
+      # But...wait until we know the query succeeded before
+      # starting the table.
+      echo '<select name = "location_id" >' ;
+      
+
+      # For each row result, generate a table row
+      while ( $row = mysqli_fetch_array( $results , MYSQLI_ASSOC ) ){
+        echo '<option value = "' . $row['id'] . '">' . $row['name'] . '</option>';
+      }
+
+      echo '</select>';
+
+      # Free up the results in memory
+      mysqli_free_result( $results ) ;
+    }
+    else
+    {
+      # If we get here, something has gone wrong
+      echo '<p>' . mysqli_error( $dbc ) . '</p>'  ;
+    }
+}
+
 
 function valid_name ($name){
-if (empty($name) || !ctype_alpha($name)){
+if (empty($name)){
     return false ;
 }
 

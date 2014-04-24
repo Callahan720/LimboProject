@@ -8,6 +8,8 @@ RC  07-Nov-13   Created.
 <!DOCTYPE html>
 <html>
 <?php
+require( 'includes/links.php' ) ;
+
 # Connect to MySQL server and the database
 require( 'includes/connect_db.php' ) ;
 

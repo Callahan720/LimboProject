@@ -8,6 +8,8 @@ RC  07-Nov-13   Created.
 <!DOCTYPE html>
 <html>
 <?php
+
+require( 'includes/links.php' ) ;
 # Connect to MySQL server and the database
 require( 'includes/connect_db.php' ) ;
 
@@ -32,9 +34,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 #}
 
 ?>
-<a href="url">Home</a>
-<a href="url">Add New Item</a>
-<a href="admin.php">Logout</a>
+
 
 <!-- temp -->
 <h1>Admin Home Page</h1>
