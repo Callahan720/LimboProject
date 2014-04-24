@@ -1,190 +1,149 @@
+<!--
+Authors Kevin Callahan and Nick Russell
+-->
+<!DOCTYPE html>
+<html>
 <?php
-#Authors Kevin Callahan and Nick Russell
-$debug = true;
+# Connect to MySQL server and the database
+require( 'includes/connect_db.php' ) ;
 
-# Shows the records in prints
-function show_records($dbc) {
-	# Create a query to get the name and number sorted by number
-	$query = 'SELECT number, fname, lname FROM presidents ORDER BY number DESC' ;
+# Includes these helper functions
+require( 'includes/helpers.php' ) ;
 
-	# Execute the query
-	$results = mysqli_query( $dbc , $query ) ;
-
-	# Show results
-	if( $results )
-	{
-	  # But...wait until we know the query succeeded before
-	  # starting the table.
-	  echo '<H1>Dead Presidents</H1>' ;
-	  echo '<TABLE border="1">';
-	  echo '<TR>';
-	  echo '<TH>Number</TH>';
-	  echo '<TH>First Name</TH>';
-	  echo '<TH>Last Name</TH>';
-	  echo '</TR>';
-
-	  # For each row result, generate a table row
-	  while ( $row = mysqli_fetch_array( $results , MYSQLI_ASSOC ) )
-	  {
-		echo '<TR>' ;
-		echo '<TD>' . $row['number'] . '</TD>' ;
-		echo '<TD>' . $row['fname'] . '</TD>' ;
-		echo '<TD>' . $row['lname'] . '</TD>' ;
-		echo '</TR>' ;
-	  }
-
-	  # End the table
-	  echo '</TABLE>';
-
-	  # Free up the results in memory
-	  mysqli_free_result( $results ) ;
-	}
-	else
-	{
-	  # If we get here, something has gone wrong
-	  echo '<p>' . mysqli_error( $dbc ) . '</p>'  ;
-	}
-}
-
-function show_record($dbc, $id) {
-	# Create a query to get the name and number sorted by number
-	$query = 'SELECT number, lname, fname FROM presidents WHERE number = ' . $id ;
-
-	# Execute the query
-	$results = mysqli_query( $dbc , $query ) ;
+//Initialize president info on a GET
+if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
+	$status = "lost";
+	$item_name = "" ;
+    $description = "";
+	$location_id = "" ;
+	$room = "" ;
+	$contact_id = "" ;
+	$email = "";
+	$phone_number = "" ;
 	
+}
+if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
+	
+	$status = $_POST['status'];
 
-	# Show results
-	if( $results )
-	{
-	  # But...wait until we know the query succeeded before
-	  # starting the table.
-	  echo '<H1>Dead Presidents</H1>' ;
-	  echo '<TABLE border="1">';
-	  echo '<TR>';
-	  echo '<TH>Number</TH>';
-	  echo '<TH>First Name</TH>';
-	  echo '<TH>Last Name</TH>';
-	  echo '</TR>';
+	$item_name = $_POST['item_name'] ;
 
-	  # For each row result, generate a table row
-	  if ( $row = mysqli_fetch_array( $results , MYSQLI_ASSOC ) )
-	  {
-		echo '<TR>' ;
-		echo '<TD>' . $row['number'] . '</TD>' ;
-		echo '<TD>' . $row['fname'] . '</TD>' ;
-		echo '<TD>' . $row['lname'] . '</TD>' ;
-		echo '</TR>' ;
-	  }
-
-	  # End the table
-	  echo '</TABLE>';
-
-	  # Free up the results in memory
-	  mysqli_free_result( $results ) ;
-	}
-	else
-	{
-	  # If we get here, something has gone wrong
-	  echo '<p>' . mysqli_error( $dbc ) . '</p>'  ;
-	}
+    $description = $_POST['description'] ;
+	
+	$location_id = $_POST['location_id'] ;
+	
+	$room = $_POST['room'] ;
+	
+	$contact_id = $_POST['contact_id'] ;
+	
+	$email = $_POST['email'] ;
+	
+	$phone_number = $_POST['phone_number'] ;
+	
+	if (!valid_name($item_name)) 
+		echo '<p style="color:red">Please give a valid item name. </p>' ;
+	else if (!valid_name($location_id)) 
+		echo '<p style="color:red">Please give a valid location. </p>' ;
+	else if (!valid_name($contact_id)) 
+		echo '<p style="color:red">Please give a valid name for your contact information. </p>' ;
+	else if ((!filter_var($email, FILTER_VALIDATE_EMAIL)) && (!valid_number($phone_number))) 
+		echo '<p style="color:red">Please give either a valid email address or phone number. </p>' ;
+	else 
+		$results = insert_record($status, $item_name, $description, $location_id, $room, $contact_id, $email, $phone_number) ;
+}
+else if($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
+	if (isset($_GET['id']))
+		show_record($dbc, $_GET['id']);
 }
 
-function show_link_records($dbc) {
-	# Create a query to get the name and number sorted by number
-	$query = 'SELECT number, lname FROM presidents ORDER BY number DESC' ;
+# Show the records
+show_link_records($dbc);
 
-	# Execute the query
-	$results = mysqli_query( $dbc , $query ) ;
+# Close the connection
+mysqli_close($dbc);
 
-	# Show results
-	if( $results )
-	{
-	  # But...wait until we know the query succeeded before
-	  # starting the table.
-	  echo '<H1>Dead Presidents</H1>' ;
-	  echo '<TABLE border="1">';
-	  echo '<TR>';
-	  echo '<TH>Number</TH>';
-	  echo '<TH>Last Name</TH>';
-	  echo '</TR>';
+show_form($status, $item_name, $description, $location_id, $room, $contact_id, $email, $phone_number) ;
 
-	  # For each row result, generate a table row
-	  while ( $row = mysqli_fetch_array( $results , MYSQLI_ASSOC ) )
-	  {
-		$alink = '<A HREF=linkypresidents.php?id=' . $row['number'] . '>' . $row['number'] . '</A>' ;
-		echo '<TR>' ;
-		echo '<TD ALIGN = right>' . $alink . '</TD>' ;
-		echo '<TD>' . $row['lname'] . '</TD>' ;
-		echo '</TR>' ;
-	  }
-
-	  # End the table
-	  echo '</TABLE>';
-
-	  # Free up the results in memory
-	  mysqli_free_result( $results ) ;
-	}
-	else
-	{
-	  # If we get here, something has gone wrong
-	  echo '<p>' . mysqli_error( $dbc ) . '</p>'  ;
-	}
-}
-
-# Inserts a record into the prints table
-function insert_record($status, $item_name, $description, $location_id, $room, $contact_id, $email, $phone_number) {
-  $query = 'INSERT INTO 
-  			stuff(status, item_name, description, location_id, room, contact_id, email, phone_number) 
-  			VALUES ("' . $status . '" , 
-  					"' . $item_name . '" , 
-  					"' . $description . '" , 
-  					"' . $location_id . '" , 
-  					"' . $room . '" ,  
-  					"' . $conact_id . '" ,  
-  					"' . $email . '" , 
-  					' . $phone_number . ' )' ;
-  
-  show_query($query);
-  
-  
-  $results = mysqli_query($dbc,$query) ;
-  check_results($results) ;
-
-  return $results ;
-}
-
-function valid_name ($name){
-if (empty($name) || !ctype_alpha($name)){
-	return false ;
-}
-
-return true;
-}
-
-function valid_number ($number){
-if (empty($number) || !is_numeric($number))
-	return false ;
-else {
-	$number = intval($number) ; 
-	if ($number <= 0)
-		return false;
-	}
-return true ;	
-}
-# Shows the query as a debugging aid
-function show_query($query) {
-  global $debug;
-
-  if($debug)
-    echo "<p>Query = $query</p>" ;
-}
-
-# Checks the query results as a debugging aid
-function check_results($results) {
-  global $dbc;
-
-  if($results != true)
-    echo '<p>SQL ERROR = ' . mysqli_error( $dbc ) . '</p>'  ;
+function show_form($status, $item_name, $description, $location_id, $room, $contact_id, $email, $phone_number) {
+	# Get inputs from the user.
+	echo '<h1> Lost and Found Stuff </h1>';
+	echo '<form action="newstuff.php" method="POST">';
+	echo '<table>';
+	echo '<tr>';
+	echo '<td>I have</td> 
+		  <td colspan = "2"><select name = "status">
+			  <option value = "lost">Lost</option>;
+			  <option value = "found">Found</option>
+			  </select>
+			  </td>
+		  <td> an item </td>';
+	echo '</tr>';
+	echo '<tr>';
+	echo '<td> Name of Item: </td> <td colspan = "3"><input type="text" name="item_name" value = "' . $item_name . '"></td>';
+	echo '</tr>';
+	echo '<tr>';
+	echo '<td>Location of Item:</td> 
+		  <td><select name = "location_id">
+			  <option value = "Champagnat">Champagnat</option>;
+			  <option value = "Leo">Leo</option>
+			  <option value = "Sheahan">Sheahan</option>
+			  <option value = "Marian">Marian</option>
+			  <option value = "Gartland">Gartland</option>
+			  <option value = "Midrise">Midrise</option>
+			  <option value = "Upper West Cedar">Upper West Cedar</option>
+			  <option value = "Talmadge">Talmadge</option>
+			  <option value = "Lower Fulton">Lower Fulton</option>
+			  <option value = "Upper Fulton">Upper Fulton</option>
+			  <option value = "Middle Fulton">Middle Fulton</option>
+			  <option value = "Foy Townhouses">Foy Townhouses</option>
+			  <option value = "Tennis Courts">Tennis Courts</option>
+			  <option value = "Greystone">Greystone</option>
+			  <option value = "Tenney Stadium">Tenney Stadium</option>
+			  <option value = "St. Anne">St. Anne</option>
+			  <option value = "Cornell Boathouse">Cornell Boathouse</option>
+			  <option value = "Marist Boathouse">Marist Boathouse</option>
+			  <option value = "Student Center">Student Center</option>
+			  <option value = "Music Building">Music Building</option>
+			  <option value = "Hancock">Hancock</option>
+			  <option value = "Donnelly">Donnelly</option>
+			  <option value = "Dyson">Dyson</option>
+			  <option value = "Fontaine">Fontaine</option>
+			  <option value = "Fontaine Annex">Fontaine Annex</option>
+			  <option value = "Lowell Thomas">Lowell Thomas</option>
+			  <option value = "Jazzmans Cafe">Jazzmans Cafe</option>
+			  <option value = "Cabaret">Cabaret</option>
+			  <option value = "Library ">Library</option>
+			  <option value = "Steel Plant">Steel Plant</option>
+			  </select></td>
+			<td> Room: </td> <input type="text" name="room" value = "' . $room . '"></td>'
+	echo '</tr>';
+	echo '<tr>';
+	echo '<td> Description:  </td>
+		  <td> <textarea rows = "10" columns = "30" name = "description" value = "' . $description . '"> </td>
+		  </tr>';
+	echo '</table>';
+	echo '<hr>';
+	echo '<h1> Contact Information </h1>';
+	echo '<table>';
+	echo '<tr>';
+	echo '<td> Name: </td> 
+		  <td> <input type="text" name = "contact_id" value = "'. $contact_id . '"> </td>
+		  ';
+	echo '</tr>';
+	echo '<tr>';
+	echo '<td> Email: </td> 
+		  <td> <input type="text" name = "email" value = "'. $email . '"> </td>
+		  ';
+	echo '</tr>';
+	echo '<tr>';
+	echo '<td> Phone Number: </td> 
+		  <td> <input type="text" name = "phone_number" value = "'. $phone_number . '"> </td>
+		  ';
+	echo '</tr>';
+	echo '</table>';
+	echo '<input type = "submit" value = "Submit">';
+	echo '</form>';
+	echo '</html>';
 }
 ?>
+
