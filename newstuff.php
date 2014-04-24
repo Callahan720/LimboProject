@@ -51,13 +51,6 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 	else 
 		$results = insert_record($status, $item_name, $description, $location_id, $room, $contact_id, $email, $phone_number) ;
 }
-else if($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
-	if (isset($_GET['id']))
-		show_record($dbc, $_GET['id']);
-}
-
-# Show the records
-show_link_records($dbc);
 
 # Close the connection
 mysqli_close($dbc);

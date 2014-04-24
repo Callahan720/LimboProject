@@ -24,13 +24,6 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 		echo '<p style="color:red">Your item could not be found. Please try again. </p>';
 	else check_id($id_number, $dbc)
 }
-else if($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
-	if (isset($_GET['id']))
-		show_record($dbc, $_GET['id']);
-}
-
-# Show the records
-show_link_records($dbc);
 
 # Close the connection
 mysqli_close($dbc);
