@@ -84,14 +84,14 @@ function show_form($dbc, $status, $item_name, $description, $location_id, $room,
     echo '<td>Location of Item:</td>'; 
     echo '<td>';
 
-    show_locations_select($dbc);
+    show_locations_select($dbc, $location_id);
 
     echo '</td>
             <td> Room: </td> <td> <input type="text" name="room" value = "' . $room . '"></td>' ;
     echo '</tr>';
     echo '<tr>';
     echo '<td> Description:  </td>
-          <td> <textarea rows = "5" columns = "50" name = "description" value = "' . $description . '"> </textarea> </td>
+          <td> <textarea rows = "5" columns = "50" name = "description" >' . $description . '</textarea> </td>
           </tr>';
     echo '</table>';
     echo '<hr>';

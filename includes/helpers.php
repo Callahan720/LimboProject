@@ -1,6 +1,6 @@
 <?php
 #Authors Kevin Callahan and Nick Russell
-$debug = true;
+$debug = false;
 
 #needed for Limbo
 function show_record_recent($dbc, $days = 7) {
@@ -141,7 +141,7 @@ function show_record_detailed_full($dbc, $id) {
         echo '<TR>' ;
         echo '<TD>' . $row['status'] . ' in: ' . $row['name'] . ' ' . $row['room'] .  '</TD>' ;
         echo '</TR>';
-		echo '<TR>' ;
+		    echo '<TR>' ;
         echo '<TD>' . 'Item Description: ' . $row['description'] . '</TD>' ;
         echo '</TR>';
         echo '<TR>' ;
@@ -198,9 +198,9 @@ function insert_record($dbc, $status, $item_name, $description, $location_id, $r
 
 
 #needed for Limbo
-function show_locations_select($dbc) {
+function show_locations_select($dbc, $id) {
     # Create a query to get the name and number sorted by number
-    $query = 'SELECT id, name FROM locations ';
+    $query = 'SELECT id, name FROM locations ORDER BY name ';
 
     # Execute the query
     $results = mysqli_query( $dbc , $query ) ;
@@ -216,7 +216,15 @@ function show_locations_select($dbc) {
 
       # For each row result, generate a table row
       while ( $row = mysqli_fetch_array( $results , MYSQLI_ASSOC ) ){
-        echo '<option value = "' . $row['id'] . '">' . $row['name'] . '</option>';
+        $temp_id = $row['id'] ;
+        
+        if ($id ==  $temp_id){ 
+          echo '<option value = "' . $temp_id . '" selected="selected">' . $row['name'] . '</option>' ;
+        }
+        else{
+          echo '<option value = "' . $temp_id . '">' . $row['name'] . '</option>' ;
+        }
+        
       }
 
       echo '</select>';
