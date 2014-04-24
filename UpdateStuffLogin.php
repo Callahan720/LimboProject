@@ -18,7 +18,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
 if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 	
 	$id_number = $_POST['id_number'];
-	$id_check = $_POST['id'];
+	$id_check = $_POST['id_check'];
 	
 	if (!valid_number($id_number)) 
 		echo '<p style="color:red">Your item could not be found. Please try again. </p>';
@@ -57,10 +57,5 @@ function check_id($id_number, $dbc) {
  	{
  	update_stuff(
  
- 
- 
-
-
-
 ?>
 
