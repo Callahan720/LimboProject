@@ -23,7 +23,11 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 	if (!valid_number($id_number)) 
 		echo '<p style="color:red">Your item could not be found. Please try again. </p>';
 <<<<<<< HEAD
+<<<<<<< HEAD
 	else check_id($id_number, $dbc) ;
+=======
+	else check_id($id_number, $dbc);
+>>>>>>> 4efdbfb921673c845a14b5ffea4cdb3b615450a1
 =======
 	else check_id($id_number, $dbc);
 >>>>>>> 4efdbfb921673c845a14b5ffea4cdb3b615450a1
@@ -43,6 +47,7 @@ function show_login_form($id_number) {
 	echo '<input type = "submit" value = "Submit">';
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 function check_id($id_number, $dbc) {
 	$id_check = ($id_number - 23)/500;
 	$query = 'SELECT status, item_name, description, location_id, room, contact_id, email, phone_number
@@ -56,6 +61,9 @@ function check_id($id_number, $dbc) {
  	#update_stuff(
  
  }
+=======
+
+>>>>>>> 4efdbfb921673c845a14b5ffea4cdb3b615450a1
 =======
 
 >>>>>>> 4efdbfb921673c845a14b5ffea4cdb3b615450a1
