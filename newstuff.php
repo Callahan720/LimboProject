@@ -9,10 +9,10 @@ require( 'includes/links.php' ) ;
 
 
 # Connect to MySQL server and the database
-require( 'includes/connect_db.php' ) ;
-
-# Includes these helper functions
 require( 'includes/helpers.php' ) ;
+
+# Initialize the database
+$dbc = init('limbo_db');
 
 //Initialize president info on a GET
 if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
@@ -24,8 +24,11 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
     $contact_name = "" ;
     $email = "";
     $phone_number = "" ;
+
+    show_form($dbc, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) ;
     
 }
+
 if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     
     $status = $_POST['status'];
@@ -56,7 +59,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         $results = insert_record($dbc, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) ;
 }
 
-show_form($dbc, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) ;
+
 
 # Close the connection
 mysqli_close($dbc);

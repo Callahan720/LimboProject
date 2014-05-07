@@ -6,8 +6,6 @@ Who	Date		Comment
 RC	 7-Nov-13	Created.
 -->
 <?php
-# Includes these helper functions
-require( 'includes/helpers.php' ) ;
 
 # Loads a specified or default URL.
 function load( $page = 'admin-1.php', $aid = -1 )
@@ -17,7 +15,7 @@ function load( $page = 'admin-1.php', $aid = -1 )
 
   # Remove trailing slashes then append page name to URL and the print id.
   $url = rtrim( $url, '/\\' ) ;
-  $url .= '/' . $page . '?id=' . $aid;
+  $url .= '/' . $page . '?id=' . $aid ;
 
   # Execute redirect then quit.
   session_start( );

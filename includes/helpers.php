@@ -2,10 +2,50 @@
 #Authors Kevin Callahan and Nick Russell
 $debug = false;
 
+
+function init($dbname){
+    # Connect to the database, if we fail assume the DB doesnt exist
+    $dbc = @mysqli_connect ( 'localhost', 'root', '', $dbname );
+
+    if($dbc) {
+        mysqli_set_charset( $dbc, 'utf8' ) ;
+
+        return $dbc;
+    }
+
+    $dbc = @mysqli_connect ( 'localhost', 'root', '', '' );
+
+    $query = 'CREATE DATABASE ' . $dbname;
+
+    $results = mysqli_query($dbc, $query);
+    check_results($results);
+
+    # Close connection since we dont need it
+    mysqli_close( $dbc );
+
+    # Connect to the (newly created) database
+    $dbc = @mysqli_connect ( 'localhost', 'root', '', $dbname )
+        OR die ( mysqli_connect_error() ) ;
+
+    # Set encoding to match PHP script encoding.
+    mysqli_set_charset( $dbc, 'utf8' ) ;
+
+    $sql= file_get_contents('insert_data.sql');
+    $results = mysqli_multi_query($dbc, $sql);
+    mysqli_close( $dbc );
+
+    # Ggives mysql some time to run through all the queries
+    # If the database needs more time to load, then there are probably other problems with the computer
+    sleep(1);
+
+    # Recursive so I can guarantee a working connection
+    return init($dbname);
+}
+
 #needed for Limbo
 function show_record_recent($dbc, $days = 7) {
     # Create a query to get the name and number sorted by number
-    $query = 'SELECT DATE(create_date) AS create_date, status, item_name, id FROM stuff WHERE status!="claimed" AND ABS(DATEDIFF(CURDATE(), create_date)) <= ' . $days ;
+    $query = 'SELECT DATE(create_date) AS create_date, status, item_name, id FROM stuff WHERE status!="claimed" AND ABS(DATEDIFF(CURDATE(), create_date)) <= ' . $days . ' ORDER BY create_date DESC' ;
 
     # Execute the query
     $results = mysqli_query( $dbc , $query ) ;
@@ -174,7 +214,7 @@ function show_record_detailed_full($dbc, $id) {
 }
 
 
-# Inserts a record into the prints table
+# Inserts a record into the stuff table
 function insert_record($dbc, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) {
   $query = 'INSERT INTO 
         stuff(status, item_name, description, location_id, room, contact_name, email, phone_number) 

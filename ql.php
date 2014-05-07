@@ -18,10 +18,10 @@ require( 'includes/links.php' ) ;
 
 <?php   
 # Connect to MySQL server and the database
-require( 'includes/connect_db.php' ) ;
-
-# Connect to MySQL server and the database
 require( 'includes/helpers.php' ) ;
+
+# Initialize the database
+$dbc = init('limbo_db');
 
 
 if($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {

@@ -11,7 +11,10 @@ RC  07-Nov-13   Created.
 require( 'includes/links.php' ) ;
 
 # Connect to MySQL server and the database
-require( 'includes/connect_db.php' ) ;
+require( 'includes/helpers.php' ) ;
+
+# Initialize the database
+$dbc = init('limbo_db');
 
 # Connect to MySQL server and the database
 require( 'includes/admin_login_tools.php' ) ;

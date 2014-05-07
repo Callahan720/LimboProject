@@ -20,10 +20,12 @@ require( 'includes/links.php' ) ;
 <p>Reported in last:</p>
 
 <?php
-if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') 
-    $days = $_POST['days'] ;
-else
+if (isset($_POST['days'])){
+        $days = $_POST['days'] ;
+    }
+else{
     $days = 0 ;
+}
 ?>
 
 <form action="limbo.php" method="POST">
@@ -39,19 +41,27 @@ else
 
 
 <?php   
-# Connect to MySQL server and the database
-require( 'includes/connect_db.php' ) ;
 
 # Connect to MySQL server and the database
 require( 'includes/helpers.php' ) ;
 
+# Initialize the database
+$dbc = init('limbo_db');
+
 echo '<div id="content" style="background-color:#FFFFFF;height:200px;width:250px;float:left;overflow:auto">' ;
 
 if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
-    $days = "" ; 
+    #$days = "" ; 
     $item_id = "" ;
 
-    show_record_recent($dbc);
+    if (isset($_POST['days'])){
+        $days = $_POST['days'] ;
+        show_record_recent($dbc, $days);
+    }
+    else{
+        show_record_recent($dbc);
+    }
+    
 }
 
 
