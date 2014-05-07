@@ -9,43 +9,41 @@ require( 'includes/links.php' ) ;
 
 
 # Connect to MySQL server and the database
-require( 'includes/connect_db.php' ) ;
-
-# Includes these helper functions
 require( 'includes/helpers.php' ) ;
 
+# Initialize the database
+$dbc = init('limbo_db');
+
 if($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
-    if (isset($_GET['id'])){
+    if (isset($_GET['id_number']) && $_GET['id_number']>522){
+        $id_number = $_GET['id_number'] ;
     	$id_check = ($id_number - 23)/500;
-        $query = 'SELECT status, item_name, description, location_id, room, contact_id, email, phone_number
- 		 	  FROM stuff
- 		 	  WHERE id = id_check';
- 		$results = mysqli_query( $dbc , $query )
- 		if ($results)
- 		{
-			show_form($dbc, $row['status'], $row['item_name'], $row['description'],
-					  $row['location_id'], $row['room'], $row['contact_name'], 
-					  $row['email'], $row['phone_number']) ;
- 		}
+        $query = 'SELECT *
+ 		 	      FROM stuff
+ 		 	      WHERE id = ' . $id_check ;
+ 		$results = mysqli_query( $dbc , $query ) ;
+        echo $query;
+ 		if ( $results && is_int($id_check)) {
+            if ( $row = mysqli_fetch_array( $results , MYSQLI_ASSOC ) ){
+    			show_form($dbc, $row['status'], $row['item_name'], $row['description'],
+    					  $row['location_id'], $row['room'], $row['contact_name'], 
+    					  $row['email'], $row['phone_number'], $id_check) ;
+     		}
+        }
  		else {
  		#Error message invalid code and pop up link to go back (ideally)
+            echo "Invalid Id";
  		}
     }
-
-//Initialize president info on a GET
-/*if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
-    $status = "lost";
-    $item_name = "" ;
-    $description = "";
-    $location_id = "" ;
-    $room = "" ;
-    $contact_name = "" ;
-    $email = "";
-    $phone_number = "" ;
-    }
-  */  
+    else {
+        #Error message invalid code and pop up link to go back (ideally)
+            echo "Invalid number/ No number";
+        }
+}
+ 
 if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
-    
+    $id_check = $_POST['id_check'];
+
     $status = $_POST['status'];
 
     $item_name = $_POST['item_name'] ;
@@ -71,20 +69,21 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     else if ((!filter_var($email, FILTER_VALIDATE_EMAIL)) && (!valid_name($phone_number))) 
         echo '<p style="color:red">Please give either a valid email address or phone number. </p>' ;
     else 
-        $results = insert_record($dbc, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) ;
+        $results = update_records($dbc, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number, $id_check) ;
 }
 
-show_form($dbc, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) ;
+
 
 # Close the connection
 mysqli_close($dbc);
 
 
 
-function show_form($dbc, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) {
+function show_form($dbc, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number, $id_check) {
     # Get inputs from the user.
     echo '<h1> Lost and Found Stuff </h1>';
-    echo '<form action="newstuff.php" method="POST">';
+    echo '<form action="update-1.php" method="POST">';
+    echo '<input type="hidden" name="id_check" value = "' . $id_check . '">';
     echo '<table>';
     echo '<tr>';
     echo '<td>I have</td> 
@@ -135,4 +134,7 @@ function show_form($dbc, $status, $item_name, $description, $location_id, $room,
     echo '</form>';
     echo '</html>';
 }
+
 ?>
+
+
