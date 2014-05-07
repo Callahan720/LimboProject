@@ -36,7 +36,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 <!-- Get inputs from the user. -->
 <h1>Admin login</h1>
 <h4>Please input your username and password</h4>
-<form action="admin.php" method="POST">
+<form action="admin-1.php" method="POST">
 <table>
 <tr>
 <td>User Name:</td><td><input type="text" name="user_name"></td>
