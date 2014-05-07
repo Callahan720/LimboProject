@@ -36,8 +36,9 @@ function validate($user_name = '', $pass = '')
       return -1 ;
 
     # Make the query
-    $query = "SELECT user_name, pass FROM users WHERE user_name= '" . $user_name . "' AND pass= '" . $pass . "'" ;
-    show_query($query) ;
+    $hashed_pass = sha1($pass) ; 
+    $query = "SELECT user_name, pass FROM users WHERE user_name= '" . $user_name . "' AND pass= '" . $hashed_pass . "'" ; 
+    show_query($query) ; 
 
     # Execute the query
     $results = mysqli_query( $dbc, $query ) ;

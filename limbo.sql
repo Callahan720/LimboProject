@@ -16,7 +16,7 @@ pass TEXT NOT NULL
 
 #Inserts data into users.
 INSERT INTO users (user_name, pass)
-VALUES ("admin", "gaze11e");
+VALUES ("admin", sha1("gaze11e"));
 
 #Creates table stuff.
 DROP TABLE IF EXISTS stuff;

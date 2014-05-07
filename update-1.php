@@ -33,11 +33,14 @@ if($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
  		else {
  		#Error message invalid code and pop up link to go back (ideally)
             echo "Invalid Id";
+            header('Location: update.php');
+            echo('error');
  		}
     }
     else {
         #Error message invalid code and pop up link to go back (ideally)
             echo "Invalid number/ No number";
+            header('Location: update.php');
         }
 }
  

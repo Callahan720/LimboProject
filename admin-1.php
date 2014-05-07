@@ -9,6 +9,8 @@ RC  07-Nov-13   Created.
 <html>
 <?php
 
+session_start();
+
 require( 'includes/links.php' ) ;
 
 # Connect to MySQL server and the database
@@ -31,6 +33,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 
     else      
       echo '<p>Welcome user ' . $aid . '</p>' ;
+      $_SESSION['user_id'] = $aid ;
 }
 
 #else if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
@@ -46,7 +49,8 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
 <hr>
 <a href="url">Add New Admin</a><br>
 <a href="url">Delete Admin User</a><br>
-<a href="url">Update Account</a><br>
+<a href="url">Change Password</a><br>
+<br>
 <a href="url">Change Status of Stuff</a><br>
 <a href="url">Delete Stuff</a><br>
 
