@@ -4,29 +4,16 @@ Authors Kevin Callahan and Nick Russell
 <!DOCTYPE html>
 <html>
 <?php
-<<<<<<< HEAD
-=======
 
 require( 'includes/links.php' ) ;
 
 
 # Connect to MySQL server and the database
 require( 'includes/connect_db.php' ) ;
->>>>>>> 4efdbfb921673c845a14b5ffea4cdb3b615450a1
 
-require( 'includes/links.php' ) ;
-
-
-# Connect to MySQL server and the database
+# Includes these helper functions
 require( 'includes/helpers.php' ) ;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-# Initialize the database
-$dbc = init('limbo_db');
-=======
-=======
->>>>>>> 4efdbfb921673c845a14b5ffea4cdb3b615450a1
 if($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
     if (isset($_GET['id'])){
     	$id_check = ($id_number - 23)/500;
@@ -44,10 +31,6 @@ if($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
  		#Error message invalid code and pop up link to go back (ideally)
  		}
     }
-<<<<<<< HEAD
->>>>>>> 4efdbfb921673c845a14b5ffea4cdb3b615450a1
-=======
->>>>>>> 4efdbfb921673c845a14b5ffea4cdb3b615450a1
 
 //Initialize president info on a GET
 /*if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
@@ -152,8 +135,4 @@ function show_form($dbc, $status, $item_name, $description, $location_id, $room,
     echo '</form>';
     echo '</html>';
 }
-<<<<<<< HEAD
 ?>
-=======
-?>
->>>>>>> 4efdbfb921673c845a14b5ffea4cdb3b615450a1
