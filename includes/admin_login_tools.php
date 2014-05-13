@@ -37,7 +37,7 @@ function validate($user_name = '', $pass = '')
 
     # Make the query
     $hashed_pass = sha1($pass) ; 
-    $query = "SELECT user_name, pass FROM users WHERE user_name= '" . $user_name . "' AND pass= '" . $hashed_pass . "'" ; 
+    $query = "SELECT user_id, user_name, pass FROM users WHERE user_name= '" . $user_name . "' AND pass= '" . $hashed_pass . "'" ; 
     show_query($query) ; 
 
     # Execute the query
@@ -54,5 +54,32 @@ function validate($user_name = '', $pass = '')
     $aid = $row [ 'user_id' ] ;
 
     return intval($aid) ;
+}
+
+function get_username($aid = '')
+{
+    global $dbc;
+
+    if(empty($aid))
+      return -1 ;
+
+    # Make the query 
+    $query = "SELECT user_name FROM users WHERE user_id= '" . $aid . "'" ; 
+    #show_query($query) ; 
+
+    # Execute the query
+    $results = mysqli_query( $dbc, $query ) ;
+    check_results($results);
+
+    # If we get no rows, the login failed
+    if (mysqli_num_rows( $results ) == 0 )
+      return -1 ;
+
+    # We have at least one row, so get the first one and return it
+    $row = mysqli_fetch_array($results, MYSQLI_ASSOC) ;
+
+    $user_name = $row [ 'user_name' ] ;
+
+    return $user_name ;
 }
 ?>

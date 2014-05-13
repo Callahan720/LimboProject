@@ -3,10 +3,15 @@ Authors Kevin Callahan and Nick Russell
 -->
 <!DOCTYPE html>
 <html>
+
+
+
 <?php
 
 require( 'includes/links.php' ) ;
-
+?>
+<h3>Input Stuff Information</h3>
+<?php
 
 # Connect to MySQL server and the database
 require( 'includes/helpers.php' ) ;
@@ -16,6 +21,14 @@ $dbc = init('limbo_db');
 
 //Initialize president info on a GET
 if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
+
+    if ( isset($_GET['insert']) ) {
+        if ($_GET['insert']==1){
+            echo '<P style=color:red>New Item Successfully Added</P>';
+        }
+    }
+
+
     $status = "lost";
     $item_name = "" ;
     $description = "";
@@ -25,7 +38,7 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
     $email = "";
     $phone_number = "" ;
 
-    show_form($dbc, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) ;
+    show_form($dbc, FALSE, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) ;
     
 }
 
@@ -47,6 +60,8 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     
     $phone_number = $_POST['phone_number'] ;
     
+    $perform_insert = $_POST['perform_insert'] ;
+
     if (!valid_name($item_name)) 
         echo '<p style="color:red">Please give a valid item name. </p>' ;
     else if (!valid_name($location_id)) 
@@ -55,8 +70,17 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
         echo '<p style="color:red">Please give a valid name for your contact information. </p>' ;
     else if ((!filter_var($email, FILTER_VALIDATE_EMAIL)) && (!valid_name($phone_number))) 
         echo '<p style="color:red">Please give either a valid email address or phone number. </p>' ;
-    else 
-        $results = insert_record($dbc, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) ;
+    else{ 
+        echo '<div id="content" style="background-color:#FFFFFF;height:200px;width:270px;float:left;overflow:auto">' ;
+        show_record_search($dbc, $status, $item_name);
+        echo '</div>' ;
+        echo "<br><br><br><br><br><br><br><br><br><br>";
+        show_form($dbc, TRUE, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) ;
+        if ($perform_insert){
+            $results = insert_record($dbc, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) ;
+            header('Location: newstuff.php?insert=1'); 
+        }
+    }
 }
 
 
@@ -66,7 +90,7 @@ mysqli_close($dbc);
 
 
 
-function show_form($dbc, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) {
+function show_form($dbc, $perform_insert, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) {
     # Get inputs from the user.
     echo '<h1> Lost and Found Stuff </h1>';
     echo '<form action="newstuff.php" method="POST">';
@@ -116,6 +140,7 @@ function show_form($dbc, $status, $item_name, $description, $location_id, $room,
           ';
     echo '</tr>';
     echo '</table>';
+    echo '<input type="hidden" name = "perform_insert" value = "'. $perform_insert . '">';
     echo '<input type = "submit" value = "Submit">';
     echo '</form>';
     echo '</html>';

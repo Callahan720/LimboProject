@@ -24,19 +24,22 @@ if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
     $user_name = $_POST['user_name'] ;
     $pass = $_POST['pass'] ;
 
+    
     $aid = validate($user_name , $pass) ;
 
-    if($aid == -1)
+    if($aid == -1){
       echo '<P style=color:red>Login failed please try again.</P>' ;
-
-    else
+    }
+    else{
+        echo $aid;
       load('admin-1.php', $aid);
+    }
 }
 ?>
 <!-- Get inputs from the user. -->
 <h1>Admin login</h1>
 <h4>Please input your username and password</h4>
-<form action="admin-1.php" method="POST">
+<form action="admin.php" method="POST">
 <table>
 <tr>
 <td>User Name:</td><td><input type="text" name="user_name"></td>

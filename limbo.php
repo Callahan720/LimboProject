@@ -48,7 +48,7 @@ require( 'includes/helpers.php' ) ;
 # Initialize the database
 $dbc = init('limbo_db');
 
-echo '<div id="content" style="background-color:#FFFFFF;height:200px;width:250px;float:left;overflow:auto">' ;
+echo '<div id="content" style="background-color:#FFFFFF;height:218px;width:250px;float:left;overflow:auto">' ;
 
 if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
     #$days = "" ; 

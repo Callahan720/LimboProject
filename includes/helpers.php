@@ -1,6 +1,6 @@
 <?php
 #Authors Kevin Callahan and Nick Russell
-$debug = true;
+$debug = false;
 
 
 function init($dbname){
@@ -30,7 +30,7 @@ function init($dbname){
     # Set encoding to match PHP script encoding.
     mysqli_set_charset( $dbc, 'utf8' ) ;
 
-    $sql= file_get_contents('insert_data.sql');
+    $sql= file_get_contents('limbo.sql');
     $results = mysqli_multi_query($dbc, $sql);
     mysqli_close( $dbc );
 
@@ -92,7 +92,7 @@ function show_record_recent($dbc, $days = 7) {
 
 #needed for Limbo
 function show_record_detailed($dbc, $id) {
-    # Create a query to get the name and number sorted by number
+    # Creates query 
     $query = 'SELECT DATE(stuff.create_date) AS create_date, extract(HOUR FROM stuff.create_date) AS create_time_hour, extract(MINUTE FROM stuff.create_date) AS create_time_minute, stuff.status, stuff.location_id, stuff.item_name, stuff.id, stuff.room, locations.name FROM stuff, locations WHERE stuff.location_id=locations.id AND stuff.id = ' . $id ;
 
     # Execute the query
@@ -102,10 +102,6 @@ function show_record_detailed($dbc, $id) {
     # Show results
     if( $results )
     {
-      # But...wait until we know the query succeeded before
-      # starting the table.
-      
-      
 
       # For each row result, generate a table row
       if ( $row = mysqli_fetch_array( $results , MYSQLI_ASSOC ) )
@@ -147,7 +143,7 @@ function show_record_detailed($dbc, $id) {
 
 #needed for Limbo
 function show_record_detailed_full($dbc, $id) {
-    # Create a query to get the name and number sorted by number
+    # Creates query
     $query = 'SELECT DATE(stuff.create_date) AS create_date, extract(HOUR FROM stuff.create_date) AS create_time_hour, extract(MINUTE FROM stuff.create_date) AS create_time_minute, stuff.status, stuff.location_id, stuff.item_name, stuff.id, stuff.room, stuff.description, stuff.contact_name, stuff.email, stuff.phone_number, locations.name FROM stuff, locations WHERE stuff.location_id=locations.id AND stuff.id = ' . $id ;
 
     # Execute the query
@@ -157,10 +153,6 @@ function show_record_detailed_full($dbc, $id) {
     # Show results
     if( $results )
     {
-      # But...wait until we know the query succeeded before
-      # starting the table.
-      
-      
 
       # For each row result, generate a table row
       if ( $row = mysqli_fetch_array( $results , MYSQLI_ASSOC ) )
@@ -213,6 +205,52 @@ function show_record_detailed_full($dbc, $id) {
     }
 }
 
+function show_record_search($dbc, $status, $item_name) {
+    # Creates query
+    $keyword = $item_name ;
+    $query = 'SELECT stuff.item_name, stuff.id, stuff.room, stuff.status, locations.name FROM stuff, locations WHERE stuff.location_id=locations.id AND stuff.status != "' . $status . '" AND stuff.item_name LIKE "%' . $item_name . '%"' ;
+
+    # Execute the query
+    $results = mysqli_query( $dbc , $query ) ;
+    
+
+    # Show results
+    if( $results )
+    {
+      # But...wait until we know the query succeeded before
+      # starting the table.
+      echo '<TABLE border="1">';
+      echo '<TR>';
+      echo '<TH>Stuff</TH>';
+      echo '<TH>Location</TH>';
+      echo '</TR>';
+
+      # For each row result, generate a table row
+      while ( $row = mysqli_fetch_array( $results , MYSQLI_ASSOC ) )
+      {
+        echo '<TR>' ;
+
+        $alink = '<A HREF=ql.php?id=' . $row['id'] . '>' . $row['item_name'] . '</A>' ;
+        echo '<TD>' . $alink . '</TD>' ;
+
+
+        echo '<TD>' . $row['status'] . ' in: ' . $row['name'] . ' ' . $row['room'] .  '</TD>' ;
+
+        echo '</TR>' ;
+      }
+
+      # End the table
+      echo '</TABLE>';
+
+      # Free up the results in memory
+      mysqli_free_result( $results ) ;
+    }
+    else
+    {
+      # If we get here, something has gone wrong
+      echo '<p>' . mysqli_error( $dbc ) . '</p>'  ;
+    }
+}
 
 # Inserts a record into the stuff table
 function insert_record($dbc, $status, $item_name, $description, $location_id, $room, $contact_name, $email, $phone_number) {

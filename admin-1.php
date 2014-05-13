@@ -11,7 +11,7 @@ RC  07-Nov-13   Created.
 
 session_start();
 
-require( 'includes/links.php' ) ;
+require( 'includes/links-admin.php' ) ;
 
 # Connect to MySQL server and the database
 require( 'includes/helpers.php' ) ;
@@ -22,37 +22,31 @@ $dbc = init('limbo_db');
 # Connect to MySQL server and the database
 require( 'includes/admin_login_tools.php' ) ;
 
-if ($_SERVER[ 'REQUEST_METHOD' ] == 'POST') {
+if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
 
-    $user_name = $_POST['user_name'] ;
+    $aid = $_GET['id'];
 
-    $aid = validate($user_name) ;
+    $user_name = get_username($aid);
 
-    if($aid == -1)
-      echo '<P style=color:red>Login failed please try again.</P>' ;
-
-    else      
-      echo '<p>Welcome user ' . $aid . '</p>' ;
-      $_SESSION['user_id'] = $aid ;
+    $_SESSION['user_id'] = $aid ;
+    
 }
 
-#else if ($_SERVER[ 'REQUEST_METHOD' ] == 'GET') {
-#    load('admin.php');
-#}
+
 
 ?>
 
 
-<!-- temp -->
+
 <h1>Admin Home Page</h1>
+<h2><?php echo '<p>Welcome user ' . $user_name . '</p>' ; ?></h2>
 <h2>Quick Links</h2>
 <hr>
-<a href="url">Add New Admin</a><br>
-<a href="url">Delete Admin User</a><br>
-<a href="url">Change Password</a><br>
-<br>
-<a href="url">Change Status of Stuff</a><br>
-<a href="url">Delete Stuff</a><br>
+<a href="admin-adduser.php">Add New Admin</a><br>
+<a href="admin-updateuser.php">Change Username</a><br>
+<a href="admin-passchange.php">Change Password</a><br>
+<a href="admin-deleteuser.php">Delete Admin User</a><br>
+
 
 
 
